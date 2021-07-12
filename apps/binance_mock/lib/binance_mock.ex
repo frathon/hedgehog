@@ -1,10 +1,43 @@
 defmodule BinanceMock do
   use GenServer
 
+  alias Binance.Order
+  alias Binance.OrderResponse
   alias Core.Struct.TradeEvent
   alias Decimal, as: D
 
   require Logger
+
+  @type symbol :: binary
+  @type quantity :: binary
+  @type price :: binary
+  @type time_in_force :: binary
+  @type timestamp :: non_neg_integer
+  @type order_id :: non_neg_integer
+  @type orig_client_order_id :: binary
+  @type recv_window :: binary
+
+  @callback order_limit_buy(
+    symbol,
+    quantity,
+    price,
+    time_in_force
+  ) :: {:ok, %OrderResponse{}} | {:error, term}
+
+  @callback order_limit_sell(
+    symbol,
+    quantity,
+    price,
+    time_in_force
+  ) :: {:ok, %OrderResponse{}} | {:error, term}
+
+  @callback get_order(
+    symbol,
+    timestamp,
+    order_id,
+    orig_client_order_id | nil,
+    recv_window | nil
+  ) :: {:ok, %Order{}} | {:error, term}
 
   defmodule State do
     defstruct order_books: %{}, subscriptions: [], fake_order_id: 1
