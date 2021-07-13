@@ -7,6 +7,9 @@ defmodule Naive.Leader do
 
   require Logger
 
+  @type event_type :: atom
+  @callback notify(event_type, %Naive.Trader.State{}) :: :ok
+
   @binance_client Application.get_env(:naive, :binance_client)
 
   defmodule State do
